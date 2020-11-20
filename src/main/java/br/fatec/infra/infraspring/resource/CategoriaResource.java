@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.fatec.infra.infraspring.model.Categoria;
 import br.fatec.infra.infraspring.service.CategoriaService;
+import io.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/categorias")
@@ -26,13 +31,31 @@ public class CategoriaResource implements ResourceInterface<Categoria> {
 	private CategoriaService service;
 
 	@Override
-	@GetMapping	
+	@ApiOperation(value = "Retorna a lista de categorias")
+	@GetMapping(produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de categorias"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	public ResponseEntity<List<Categoria>> get() {
 		return ResponseEntity.ok(service.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
+	@ApiOperation(value = "Retorna os dados da categoria pelo identificador")
+	@GetMapping(value = "/{id}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna os dados da categoria pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		Categoria _obj = service.findById(id);
 		if (_obj != null)
@@ -42,16 +65,34 @@ public class CategoriaResource implements ResourceInterface<Categoria> {
 	
 		
 	@Override
-	@PostMapping
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Insere uma categoria e retorna ela")
+	@PostMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Insere uma categoria e retorna ela"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Categoria> post(@RequestBody Categoria obj) {
 		service.create(obj);
 		return ResponseEntity.ok(obj);
 	}
 
 	@Override
-	@PutMapping
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Altera uma categoria e retorna ela")
+	@PutMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Altera uma categoria e retorna ela"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> put(@RequestBody Categoria obj) {
 		if (service.update(obj)) {
 			return ResponseEntity.ok(obj);
@@ -60,8 +101,17 @@ public class CategoriaResource implements ResourceInterface<Categoria> {
 	}
 
 	@Override
-	@DeleteMapping(value = "/{id}")
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Deleta uma categoria pelo identificador")
+	@DeleteMapping(value = "/{id}")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Deleta uma categoria pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		if (service.delete(id)) {
 			return ResponseEntity.ok().build();

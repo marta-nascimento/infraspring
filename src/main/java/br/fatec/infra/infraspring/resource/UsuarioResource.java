@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.fatec.infra.infraspring.model.Usuario;
 import br.fatec.infra.infraspring.service.UsuarioService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -26,15 +29,33 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 	private UsuarioService service;
 
 	@Override
-	@GetMapping	
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Retorna a lista de usuários")
+	@GetMapping(produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de usuários"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<List<Usuario>> get() {
 		return ResponseEntity.ok(service.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Retorna a lista de usuários pelo identificador")
+	@GetMapping(value = "/{id}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de usuários pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		Usuario _obj = service.findById(id);
 		if (_obj != null)
@@ -44,16 +65,34 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 	
 		
 	@Override
-	@PostMapping
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Insere um usuário e retorna ele")
+	@PostMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Insere um usuário e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Usuario> post(@RequestBody Usuario obj) {
 		service.create(obj);
 		return ResponseEntity.ok(obj);
 	}
 
 	@Override
-	@PutMapping
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Altera um usuário e retorna ele")
+	@PutMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Altera um usuário e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> put(@RequestBody Usuario obj) {
 		if (service.update(obj)) {
 			return ResponseEntity.ok(obj);
@@ -62,8 +101,17 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 	}
 
 	@Override
-	@DeleteMapping(value = "/{id}")
-	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value = "Deleta um usuário pelo identificador")
+	@DeleteMapping(value = "/{id}")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Deleta um usuário pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		if (service.delete(id)) {
 			return ResponseEntity.ok().build();

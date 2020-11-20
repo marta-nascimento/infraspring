@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.fatec.infra.infraspring.model.Pedido;
 import br.fatec.infra.infraspring.service.PedidoService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -26,13 +29,31 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	private PedidoService service;
 
 	@Override
-	@GetMapping	
+	@ApiOperation(value = "Retorna a lista de pedidos")
+	@GetMapping(produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de pedidos"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	public ResponseEntity<List<Pedido>> get() {
 		return ResponseEntity.ok(service.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
+	@ApiOperation(value = "Retorna a lista de pedidos pelo identificador")
+	@GetMapping(value = "/{id}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de pedidos pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		Pedido _obj = service.findById(id);
 		if (_obj != null)
@@ -42,7 +63,16 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	
 		
 	@Override
-	@PostMapping
+	@ApiOperation(value = "Insere um pedido e retorna ele")
+	@PostMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Insere um pedido e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Pedido> post(@RequestBody Pedido obj) {
 		service.create(obj);
@@ -50,7 +80,16 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	}
 
 	@Override
-	@PutMapping
+	@ApiOperation(value = "Altera um pedido e retorna ele")
+	@PutMapping(produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Altera um pedido e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> put(@RequestBody Pedido obj) {
 		if (service.update(obj)) {
@@ -60,7 +99,16 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	}
 
 	@Override
-	@DeleteMapping(value = "/{id}")
+	@ApiOperation(value = "Deleta um pedido pelo identificador")
+	@DeleteMapping(value = "/{id}")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Deleta um pedido pelo identificador"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		if (service.delete(id)) {
