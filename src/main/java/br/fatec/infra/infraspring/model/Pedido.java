@@ -36,14 +36,11 @@ public class Pedido extends AbstractEntity{
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "tb_situacao_pedido")
 	private Set<Integer> situacaos = new HashSet<>();
+
+	@ManyToOne()
+	private Servico servico;
 	
-	@ManyToMany 
-	@JoinTable(name = "tb_servico_pedido",
-	           joinColumns=@JoinColumn(name="fk_pedido_id"),
-	           inverseJoinColumns=@JoinColumn(name="fk_servico_id"))
-	private List<Servico> servicos;
-	
-	@ManyToOne(/*fetch = FetchType.LAZY*/)
+	@ManyToOne()
     private Usuario usuario;
 	
 
@@ -62,13 +59,13 @@ public class Pedido extends AbstractEntity{
 	}
 
 	//@JsonIgnore
-	public List<Servico> getServicos() {
-		return servicos;
+	public Servico getServico() {
+		return servico;
 	}
 
 	@JsonProperty
-	public void setServicos(List<Servico> servicos) {
-		this.servicos = servicos;
+	public void setServico(Servico servico) {
+		this.servico = servico;
 	}
 
 	public Date getData() {

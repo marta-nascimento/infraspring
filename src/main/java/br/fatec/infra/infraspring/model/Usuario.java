@@ -31,7 +31,6 @@ public class Usuario extends AbstractEntity {
     private String senha;
 	
 	@OneToMany(cascade=CascadeType.REMOVE, orphanRemoval=true, mappedBy="usuario")
-	//@JoinColumn(name = "categoria_id" )
 	private List<Pedido> pedidos;
 	
 	@ElementCollection(fetch = FetchType.EAGER)

@@ -37,11 +37,8 @@ public class Servico extends AbstractEntity{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     private Categoria categoria;
-	
-	@ManyToMany
-	@JoinTable(name = "tb_servico_pedido",
-	           joinColumns=@JoinColumn(name="fk_pedido_id"),
-	           inverseJoinColumns=@JoinColumn(name="fk_servico_id"))
+
+	@OneToMany(cascade=CascadeType.REMOVE, orphanRemoval=true, mappedBy="servico")
 	private List<Pedido> pedidos;
 
 	public Servico() {}
