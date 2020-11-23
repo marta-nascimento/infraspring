@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,7 +20,8 @@ public class Categoria extends AbstractEntity {
 	@Column(name = "nm_categoria", length = 50)
 	private String nome;
 	
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(cascade=CascadeType.REMOVE, orphanRemoval=true, mappedBy="categoria")
+	//@JoinColumn(name = "categoria_id" )
 	private List<Servico> servicos;
 
 	public Categoria() {
@@ -33,7 +35,7 @@ public class Categoria extends AbstractEntity {
 		this.nome = nome;
 	}	
 	
-	@JsonIgnore
+	//@JsonIgnore
 	public List<Servico> getServicos() {
 		return servicos;
 	}

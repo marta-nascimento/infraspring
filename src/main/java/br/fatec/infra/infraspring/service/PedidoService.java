@@ -9,6 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.fatec.infra.infraspring.model.Pedido;
+import br.fatec.infra.infraspring.model.Servico;
+import br.fatec.infra.infraspring.model.TipoPerfil;
+import br.fatec.infra.infraspring.model.TipoSituacao;
 import br.fatec.infra.infraspring.repository.PedidoRepository;
 import br.fatec.infra.infraspring.security.UserDetailsImpl;
 
@@ -23,6 +26,8 @@ public class PedidoService implements ServiceInterface<Pedido>{
 	
 	@Override
 	public Pedido create(Pedido obj) {
+		obj.addSituacaos(TipoSituacao.PENDENTE);
+		obj.getUsuario().addPerfil(TipoPerfil.USUARIO);
 		repository.save(obj);
 		return obj;
 	}
@@ -41,12 +46,35 @@ public class PedidoService implements ServiceInterface<Pedido>{
 	@Override
 	public boolean update(Pedido obj) {
 		if (repository.existsById(obj.getId())) {
+			obj.addSituacaos(TipoSituacao.PENDENTE);
+			repository.save(obj);
+			return true;
+		}
+		return false;
+	}
+	
+	public List<Pedido> findByUsuario(String usuario) {
+		return repository.findByUsuario(usuario);
+	}
+
+	public boolean reprovar(Pedido obj) {
+		if (repository.existsById(obj.getId())) {
+			obj.addSituacaos(TipoSituacao.REPROVADO);
 			repository.save(obj);
 			return true;
 		}
 		return false;
 	}
 
+	public boolean aprovar(Pedido obj) {
+		if (repository.existsById(obj.getId())) {
+			obj.addSituacaos(TipoSituacao.APROVADO);
+			repository.save(obj);
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean delete(Long id) {
 		Optional<Pedido> _cat = repository.findById(id);

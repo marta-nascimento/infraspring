@@ -61,6 +61,21 @@ public class ServicoResource implements ResourceInterface<Servico>{
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
+
+	@ApiOperation(value = "Retorna a lista de serviços pela categoria")
+	@GetMapping(value = "/categoria/{id}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de serviços pela categoria"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	public ResponseEntity<?> getByCategoria(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(service.findByCategoria(id));
+	}
+	
 		
 	@Override
 	@ApiOperation(value = "Insere um serviço e retorna ele")

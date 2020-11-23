@@ -2,8 +2,8 @@ package br.fatec.infra.infraspring.model;
 
 public enum TipoSituacao {
 	PENDENTE(1, "Pendente"),
-	PROCESSANDO(2, "Processando"),
-	FINALIZADO(3, "Finalizado");
+	APROVADO(2, "Aprovado"),
+	REPROVADO(3, "Reprovado");
 	
 	private Integer cod;
 	private String descricao;

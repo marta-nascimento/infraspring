@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.fatec.infra.infraspring.exception.AuthorizationException;
 import br.fatec.infra.infraspring.security.JWTUtil;
+import br.fatec.infra.infraspring.model.TipoPerfil;
 import br.fatec.infra.infraspring.model.Usuario;
 import br.fatec.infra.infraspring.repository.UsuarioRepository;
 import br.fatec.infra.infraspring.security.UserDetailsImpl;
@@ -34,6 +35,9 @@ public class UsuarioService implements ServiceInterface <Usuario>{
 	@Override
 	public Usuario create(Usuario obj) {
 		obj.setSenha(passwordEncoder.encode(obj.getSenha()));
+		if (obj.getPerfis().size() == 0) {
+			obj.addPerfil(TipoPerfil.USUARIO);
+		}
 		repository.save(obj);
 		return obj;
 	}
@@ -46,6 +50,10 @@ public class UsuarioService implements ServiceInterface <Usuario>{
 		Optional<Usuario> _us = repository.findById(id);
 		return _us.orElse(null);
 	}
+	
+	public Usuario findByLogin(String login) throws AuthorizationException {
+		return repository.findByLogin(login);
+	}
 
 	@Override
 	public List<Usuario> findAll() {		
@@ -55,6 +63,11 @@ public class UsuarioService implements ServiceInterface <Usuario>{
 	@Override
 	public boolean update(Usuario obj) {
 		if (repository.existsById(obj.getId())) {
+			obj.setSenha(passwordEncoder.encode(obj.getSenha()));
+
+			if (obj.getPerfis().size() == 0) {
+				obj.addPerfil(TipoPerfil.USUARIO);
+			}
 			repository.save(obj);
 			return true;
 		}

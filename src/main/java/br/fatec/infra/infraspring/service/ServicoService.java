@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.fatec.infra.infraspring.model.Servico;
+import br.fatec.infra.infraspring.model.Categoria;
 import br.fatec.infra.infraspring.repository.ServicoRepository;
 import br.fatec.infra.infraspring.security.UserDetailsImpl;
 
@@ -33,6 +34,10 @@ public class ServicoService implements ServiceInterface <Servico>{
 		return _cat.orElse(null);
 	}
 
+	public List<Servico> findByCategoria(Long categoria) {
+		return repository.findByCategoria(categoria);
+	}
+	
 	@Override
 	public List<Servico> findAll() {		
 		return repository.findAll();
@@ -57,13 +62,4 @@ public class ServicoService implements ServiceInterface <Servico>{
 		return false;
 	}
 	
-	public static UserDetailsImpl authenticated() {
-		Authentication auth = SecurityContextHolder
-				.getContext()
-				.getAuthentication();
-		if (auth != null) {
-			return (UserDetailsImpl) auth.getPrincipal();
-		}
-		return null;
-	}
 }

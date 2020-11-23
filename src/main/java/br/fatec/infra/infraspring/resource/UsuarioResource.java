@@ -45,11 +45,11 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 	}
 
 	@Override
-	@ApiOperation(value = "Retorna a lista de usuários pelo identificador")
+	@ApiOperation(value = "Retorna o usuário pelo identificador")
 	@GetMapping(value = "/{id}", produces = "application/json")	
 	@ApiResponses(value = {
 			@ApiResponse(code = 200,
-			             message = "Retorna a lista de usuários pelo identificador"),
+			             message = "Retorna o usuário pelo identificador"),
 			@ApiResponse(code = 403,
 			             message = "Você não tem permissão para acessar este recurso"),
 			@ApiResponse(code = 500,
@@ -62,7 +62,23 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 			return ResponseEntity.ok(_obj);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
-	
+
+	@ApiOperation(value = "Retorna o usuário pelo login")
+	@GetMapping(value = "login/{login}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna o usuário pelo login"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	public ResponseEntity<?> getByLogin(@PathVariable("login") String login) {
+		Usuario _obj = service.findByLogin(login);
+		if (_obj != null)
+			return ResponseEntity.ok(_obj);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
 		
 	@Override
 	@ApiOperation(value = "Insere um usuário e retorna ele")
@@ -75,7 +91,7 @@ public class UsuarioResource implements ResourceInterface<Usuario>{
 			@ApiResponse(code = 500,
 			             message = "Foi gerada uma exceção"),
 	})
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	//@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Usuario> post(@RequestBody Usuario obj) {
 		service.create(obj);
 		return ResponseEntity.ok(obj);

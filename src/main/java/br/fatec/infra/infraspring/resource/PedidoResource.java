@@ -60,6 +60,20 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 			return ResponseEntity.ok(_obj);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
+
+	@ApiOperation(value = "Retorna a lista de pedidos pelo usuário")
+	@GetMapping(value = "/usuario/{login}", produces = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Retorna a lista de pedidos pelo usuário"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	public ResponseEntity<?> getByUsuario(@PathVariable("login") String login) {
+		return ResponseEntity.ok(service.findByUsuario(login));
+	}
 	
 		
 	@Override
@@ -73,7 +87,6 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 			@ApiResponse(code = 500,
 			             message = "Foi gerada uma exceção"),
 	})
-	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Pedido> post(@RequestBody Pedido obj) {
 		service.create(obj);
 		return ResponseEntity.ok(obj);
@@ -93,6 +106,42 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<?> put(@RequestBody Pedido obj) {
 		if (service.update(obj)) {
+			return ResponseEntity.ok(obj);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	
+	@ApiOperation(value = "Altera a situação do pedido para reprovado e retorna ele")
+	@PutMapping(value = "/reprovar", produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Altera a situação do pedido para reprovado e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<?> reprovar(@RequestBody Pedido obj) {
+		if (service.reprovar(obj)) {
+			return ResponseEntity.ok(obj);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	
+	@ApiOperation(value = "Altera a situação do pedido para aprovado e retorna ele")
+	@PutMapping(value = "/aprovar", produces = "application/json", consumes = "application/json")	
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,
+			             message = "Altera a situação do pedido para aprovado e retorna ele"),
+			@ApiResponse(code = 403,
+			             message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500,
+			             message = "Foi gerada uma exceção"),
+	})
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<?> aprovar(@RequestBody Pedido obj) {
+		if (service.aprovar(obj)) {
 			return ResponseEntity.ok(obj);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
