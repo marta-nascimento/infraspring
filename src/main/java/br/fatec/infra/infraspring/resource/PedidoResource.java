@@ -44,11 +44,11 @@ public class PedidoResource implements ResourceInterface<Pedido>{
 	}
 
 	@Override
-	@ApiOperation(value = "Retorna a lista de pedidos pelo identificador")
+	@ApiOperation(value = "Retorna o pedido pelo identificador")
 	@GetMapping(value = "/{id}", produces = "application/json")	
 	@ApiResponses(value = {
 			@ApiResponse(code = 200,
-			             message = "Retorna a lista de pedidos pelo identificador"),
+			             message = "Retorna o pedido pelo identificador"),
 			@ApiResponse(code = 403,
 			             message = "Você não tem permissão para acessar este recurso"),
 			@ApiResponse(code = 500,

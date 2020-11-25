@@ -44,11 +44,11 @@ public class ServicoResource implements ResourceInterface<Servico>{
 	}
 
 	@Override
-	@ApiOperation(value = "Retorna a lista de serviços pelo identificador")
+	@ApiOperation(value = "Retorna o serviço pelo identificador")
 	@GetMapping(value = "/{id}", produces = "application/json")	
 	@ApiResponses(value = {
 			@ApiResponse(code = 200,
-			             message = "Retorna a lista de serviços pelo identificador"),
+			             message = "Retorna o serviço pelo identificador"),
 			@ApiResponse(code = 403,
 			             message = "Você não tem permissão para acessar este recurso"),
 			@ApiResponse(code = 500,

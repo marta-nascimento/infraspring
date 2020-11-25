@@ -84,14 +84,4 @@ public class PedidoService implements ServiceInterface<Pedido>{
 		}
 		return false;
 	}
-	
-	public static UserDetailsImpl authenticated() {
-		Authentication auth = SecurityContextHolder
-				.getContext()
-				.getAuthentication();
-		if (auth != null) {
-			return (UserDetailsImpl) auth.getPrincipal();
-		}
-		return null;
-	}
 }
